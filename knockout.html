@@ -57,63 +57,36 @@
 
     <div class="match" id="quarterfinals">
         <h2>八强预测</h2>
-        <div class="team-select" id="quarterfinals_match1">
+        <div class="team-select" id="quarterfinals_match1" onclick="selectWinner('quarterfinals_match1')">
             <label for="quarterfinals_team1">对阵：</label>
-            <select id="quarterfinals_team1">
-                <!-- 这里将根据本地存储中的数据动态生成选项 -->
-            </select>
+            <div id="quarterfinals_team1" class="team">队伍 A</div>
+            <div id="quarterfinals_team2" class="team">队伍 B</div>
         </div>
         <!-- 可以添加更多八强赛的对阵 -->
     </div>
 
-    <div class="match" id="semifinals">
+    <div class="match" id="semifinals" style="display: none;">
         <h2>四强预测</h2>
-        <div class="team-select" id="semifinals_match1">
+        <div class="team-select" id="semifinals_match1" onclick="selectWinner('semifinals_match1')">
             <label for="semifinals_team1">对阵：</label>
-            <select id="semifinals_team1">
-                <!-- 这里将根据本地存储中的数据动态生成选项 -->
-            </select>
+            <div id="semifinals_team1" class="team"></div>
+            <div id="semifinals_team2" class="team"></div>
         </div>
         <!-- 可以添加更多四强赛的对阵 -->
     </div>
 
-    <div class="match" id="final">
+    <div class="match" id="final" style="display: none;">
         <h2>决赛预测</h2>
-        <div class="team-select" id="final_match1">
+        <div class="team-select" id="final_match1" onclick="selectWinner('final_match1')">
             <label for="final_team1">对阵：</label>
-            <select id="final_team1">
-                <!-- 这里将根据本地存储中的数据动态生成选项 -->
-            </select>
+            <div id="final_team1" class="team"></div>
+            <div id="final_team2" class="team"></div>
         </div>
     </div>
 
-    <!-- 显示晋级关系的视觉图表 -->
-    <div class="bracket">
-        <h2>晋级关系</h2>
-        <div class="round">
-            <h3>八强</h3>
-            <div class="matchup" id="bracket_quarterfinals">
-                <!-- 这里将根据本地存储中的数据动态生成对阵信息 -->
-            </div>
-        </div>
-        <div class="round">
-            <h3>四强</h3>
-            <div class="matchup" id="bracket_semifinals">
-                <!-- 这里将根据本地存储中的数据动态生成对阵信息 -->
-            </div>
-        </div>
-        <div class="round">
-            <h3>决赛</h3>
-            <div class="matchup" id="bracket_final">
-                <!-- 这里将根据本地存储中的数据动态生成对阵信息 -->
-            </div>
-        </div>
-    </div>
+    <button class="submit-btn" onclick="submitPredictions()">提交预测</button>
 
     <script>
-        // 从本地存储中获取小组赛阶段的选择数据
-        var groupStageSelection = JSON.parse(localStorage.getItem('groupStageSelection'));
-
         // 存储淘汰赛阶段的预测
         var knockoutPredictions = {
             'quarterfinals': {},
@@ -121,48 +94,54 @@
             'final': {}
         };
 
-        // 初始化页面时生成选项和晋级关系
-        document.addEventListener('DOMContentLoaded', function() {
-            generateMatchOptions('quarterfinals_team1', 'quarterfinals_match1', ['groupA_team1', 'groupB_team4']);
-            generateMatchOptions('semifinals_team1', 'semifinals_match1', ['winnerQF1', 'winnerQF2']);
-            generateMatchOptions('final_team1', 'final_match1', ['winnerSF1']);
+        // 处理胜者选择
+        function selectWinner(matchId) {
+            var matchDiv = document.getElementById(matchId);
+            var teams = matchDiv.getElementsByClassName('team');
 
-            updateBracketView();
-        });
+            // 标记已选中的队伍
+            for (var i = 0; i < teams.length; i++) {
+                teams[i].classList.remove('selected');
+            }
 
-        // 生成对阵选项
-        function generateMatchOptions(selectId, matchDivId, teams) {
-            var select = document.getElementById(selectId);
-            select.innerHTML = '';
-            teams.forEach(function(teamId) {
-                var teamName = document.getElementById(teamId).textContent;
-                var option = document.createElement('option');
-                option.value = teamName;
-                option.textContent = teamName;
-                select.appendChild(option);
-            });
+            event.target.classList.add('selected');
 
-            var matchDiv = document.getElementById(matchDivId);
-            matchDiv.querySelector('label').textContent = '对阵：';
+            // 如果是八强赛的选择
+            if (matchId === 'quarterfinals_match1') {
+                var selectedTeam = event.target.textContent.trim();
+                knockoutPredictions.quarterfinals.match1 = selectedTeam;
+
+                // 更新四强赛对阵显示
+                document.getElementById('semifinals').style.display = 'block';
+                document.getElementById('semifinals_team1').textContent = selectedTeam + ' 1';
+                document.getElementById('semifinals_team2').textContent = selectedTeam + ' 2';
+            }
+
+            // 如果是四强赛的选择
+            else if (matchId === 'semifinals_match1') {
+                knockoutPredictions.semifinals.match1 = event.target.textContent.trim();
+
+                // 更新决赛对阵显示
+                document.getElementById('final').style.display = 'block';
+                document.getElementById('final_team1').textContent = knockoutPredictions.semifinals.match1 + ' 1';
+                document.getElementById('final_team2').textContent = knockoutPredictions.semifinals.match1 + ' 2';
+            }
+
+            // 如果是决赛的选择
+            else if (matchId === 'final_match1') {
+                knockoutPredictions.final.match1 = event.target.textContent.trim();
+            }
         }
 
-        // 更新晋级关系视图
-        function updateBracketView() {
-            document.getElementById('bracket_quarterfinals').innerHTML = `
-                <p>${groupStageSelection.groupA_team1}</p>
-                <p>vs</p>
-                <p>${groupStageSelection.groupB_team4}</p>
-            `;
-            document.getElementById('bracket_semifinals').innerHTML = `
-                <p>八强赛1胜者</p>
-                <p>vs</p>
-                <p>八强赛2胜者</p>
-            `;
-            document.getElementById('bracket_final').innerHTML = `
-                <p>四强赛1胜者</p>
-                <p>vs</p>
-                <p>四强赛2胜者</p>
-            `;
+        // 处理提交预测
+        function submitPredictions() {
+            // 示例：输出预测结果到控制台
+            console.log('淘汰赛预测结果：', knockoutPredictions);
+
+            // 可以将预测结果发送到服务器或进行其他处理
+
+            // 示例：跳转回小组赛预测页面
+            window.location.href = "index.html";
         }
     </script>
 </body>
