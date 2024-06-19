@@ -11,30 +11,30 @@
             margin: 0 auto;
             padding: 20px;
         }
-        h1 {
-            margin-bottom: 20px;
-        }
         .match {
             margin-bottom: 20px;
-            padding: 10px;
             border: 1px solid #ccc;
+            padding: 10px;
         }
-        .match h3 {
-            margin: 0;
-            font-size: 18px;
-        }
-        .match .team-select {
+        .team-select {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
         }
-        .match .team-select label {
+        .team-select label {
             font-weight: bold;
         }
-        .match .team-select select {
+        .team-select .team {
             width: 70%;
             padding: 5px;
             font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .team-select .team.selected {
+            background-color: #007bff;
+            color: white;
         }
         .submit-btn {
             display: block;
@@ -56,47 +56,64 @@
     <h1>2024 美洲杯淘汰赛预测</h1>
 
     <div class="match" id="quarterfinals">
-        <h3>八强预测</h3>
+        <h2>八强预测</h2>
         <div class="team-select" id="quarterfinals_match1">
             <label for="quarterfinals_team1">对阵：</label>
             <select id="quarterfinals_team1">
-                <!-- 你可以根据需要添加八强赛的对阵 -->
-                <option value="winnerGroupA">小组A第一名 vs 小组B第二名</option>
-                <option value="winnerGroupB">小组B第一名 vs 小组A第二名</option>
-                <!-- 其他对阵 -->
+                <!-- 这里将根据本地存储中的数据动态生成选项 -->
             </select>
         </div>
         <!-- 可以添加更多八强赛的对阵 -->
     </div>
 
     <div class="match" id="semifinals">
-        <h3>四强预测</h3>
+        <h2>四强预测</h2>
         <div class="team-select" id="semifinals_match1">
             <label for="semifinals_team1">对阵：</label>
             <select id="semifinals_team1">
-                <!-- 你可以根据需要添加四强赛的对阵 -->
-                <option value="winnerQF1">八强赛1胜者 vs 八强赛2胜者</option>
-                <option value="winnerQF2">八强赛3胜者 vs 八强赛4胜者</option>
-                <!-- 其他对阵 -->
+                <!-- 这里将根据本地存储中的数据动态生成选项 -->
             </select>
         </div>
         <!-- 可以添加更多四强赛的对阵 -->
     </div>
 
     <div class="match" id="final">
-        <h3>决赛预测</h3>
+        <h2>决赛预测</h2>
         <div class="team-select" id="final_match1">
             <label for="final_team1">对阵：</label>
             <select id="final_team1">
-                <!-- 添加决赛对阵 -->
-                <option value="winnerSF1">四强赛1胜者 vs 四强赛2胜者</option>
+                <!-- 这里将根据本地存储中的数据动态生成选项 -->
             </select>
         </div>
     </div>
 
-    <button class="submit-btn" onclick="submitKnockoutPredictions()">提交淘汰赛预测</button>
+    <!-- 显示晋级关系的视觉图表 -->
+    <div class="bracket">
+        <h2>晋级关系</h2>
+        <div class="round">
+            <h3>八强</h3>
+            <div class="matchup" id="bracket_quarterfinals">
+                <!-- 这里将根据本地存储中的数据动态生成对阵信息 -->
+            </div>
+        </div>
+        <div class="round">
+            <h3>四强</h3>
+            <div class="matchup" id="bracket_semifinals">
+                <!-- 这里将根据本地存储中的数据动态生成对阵信息 -->
+            </div>
+        </div>
+        <div class="round">
+            <h3>决赛</h3>
+            <div class="matchup" id="bracket_final">
+                <!-- 这里将根据本地存储中的数据动态生成对阵信息 -->
+            </div>
+        </div>
+    </div>
 
     <script>
+        // 从本地存储中获取小组赛阶段的选择数据
+        var groupStageSelection = JSON.parse(localStorage.getItem('groupStageSelection'));
+
         // 存储淘汰赛阶段的预测
         var knockoutPredictions = {
             'quarterfinals': {},
@@ -104,25 +121,48 @@
             'final': {}
         };
 
-        // 处理淘汰赛预测提交
-        function submitKnockoutPredictions() {
-            // 获取用户选择的八强对阵
-            knockoutPredictions.quarterfinals.match1 = document.getElementById('quarterfinals_team1').value;
-            // 可以继续添加其他八强对阵的选择
+        // 初始化页面时生成选项和晋级关系
+        document.addEventListener('DOMContentLoaded', function() {
+            generateMatchOptions('quarterfinals_team1', 'quarterfinals_match1', ['groupA_team1', 'groupB_team4']);
+            generateMatchOptions('semifinals_team1', 'semifinals_match1', ['winnerQF1', 'winnerQF2']);
+            generateMatchOptions('final_team1', 'final_match1', ['winnerSF1']);
 
-            // 获取用户选择的四强对阵
-            knockoutPredictions.semifinals.match1 = document.getElementById('semifinals_team1').value;
-            // 可以继续添加其他四强对阵的选择
+            updateBracketView();
+        });
 
-            // 获取用户选择的决赛对阵
-            knockoutPredictions.final.match1 = document.getElementById('final_team1').value;
+        // 生成对阵选项
+        function generateMatchOptions(selectId, matchDivId, teams) {
+            var select = document.getElementById(selectId);
+            select.innerHTML = '';
+            teams.forEach(function(teamId) {
+                var teamName = document.getElementById(teamId).textContent;
+                var option = document.createElement('option');
+                option.value = teamName;
+                option.textContent = teamName;
+                select.appendChild(option);
+            });
 
-            // 可以将预测发送到服务器进行后续处理，或者在这里处理预测逻辑
-            console.log(knockoutPredictions);
-            alert("淘汰赛预测成功提交！");
+            var matchDiv = document.getElementById(matchDivId);
+            matchDiv.querySelector('label').textContent = '对阵：';
+        }
 
-            // 可以重定向用户到另一个页面显示结果，或者更新当前页面显示结果
-            // window.location.href = "/result";
+        // 更新晋级关系视图
+        function updateBracketView() {
+            document.getElementById('bracket_quarterfinals').innerHTML = `
+                <p>${groupStageSelection.groupA_team1}</p>
+                <p>vs</p>
+                <p>${groupStageSelection.groupB_team4}</p>
+            `;
+            document.getElementById('bracket_semifinals').innerHTML = `
+                <p>八强赛1胜者</p>
+                <p>vs</p>
+                <p>八强赛2胜者</p>
+            `;
+            document.getElementById('bracket_final').innerHTML = `
+                <p>四强赛1胜者</p>
+                <p>vs</p>
+                <p>四强赛2胜者</p>
+            `;
         }
     </script>
 </body>
