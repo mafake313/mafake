@@ -1,29 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>美洲杯预测</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024 美洲杯小组赛预测</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .group {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .team-select {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .team-select label {
+            font-weight: bold;
+        }
+        .team-select select {
+            width: 70%;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .submit-btn {
+            display: block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>美洲杯预测</h1>
-    <div class="prediction-form">
-        <label for="team">选择你支持的球队:</label>
-        <select id="team">
-            <option value="argentina">阿根廷</option>
-            <option value="brazil">巴西</option>
-            <option value="chile">智利</option>
-            <option value="colombia">哥伦比亚</option>
-            <!-- 可以添加更多选项 -->
-        </select>
-        <button onclick="predictWinner()">预测</button>
+    <h1>2024 美洲杯小组赛预测</h1>
+
+    <div class="group" id="groupA">
+        <h2>小组 A</h2>
+        <div class="team-select">
+            <label for="groupA_team1">队伍 1：</label>
+            <select id="groupA_team1">
+                <option value="Argentina">Argentina</option>
+                <option value="Bolivia">Bolivia</option>
+                <option value="Chile">Chile</option>
+                <option value="Paraguay">Paraguay</option>
+            </select>
+        </div>
+        <div class="team-select">
+            <label for="groupA_team2">队伍 2：</label>
+            <select id="groupA_team2">
+                <option value="Argentina">Argentina</option>
+                <option value="Bolivia">Bolivia</option>
+                <option value="Chile">Chile</option>
+                <option value="Paraguay">Paraguay</option>
+            </select>
+        </div>
     </div>
-    <div id="prediction-result" class="prediction-result">
-        <!-- 这里显示预测结果 -->
+
+    <div class="group" id="groupB">
+        <h2>小组 B</h2>
+        <div class="team-select">
+            <label for="groupB_team1">队伍 1：</label>
+            <select id="groupB_team1">
+                <option value="Brazil">Brazil</option>
+                <option value="Ecuador">Ecuador</option>
+                <option value="Peru">Peru</option>
+                <option value="Venezuela">Venezuela</option>
+            </select>
+        </div>
+        <div class="team-select">
+            <label for="groupB_team2">队伍 2：</label>
+            <select id="groupB_team2">
+                <option value="Brazil">Brazil</option>
+                <option value="Ecuador">Ecuador</option>
+                <option value="Peru">Peru</option>
+                <option value="Venezuela">Venezuela</option>
+            </select>
+        </div>
     </div>
-</div>
-<script src="script.js"></script>
+
+    <!-- 小组 C 和 D 的代码类似，这里省略 -->
+
+    <button class="submit-btn" onclick="submitPredictions()">提交预测</button>
+
+    <script>
+        function submitPredictions() {
+            // 收集用户选择的前两名队伍
+            var predictions = {
+                'A': [document.getElementById('groupA_team1').value, document.getElementById('groupA_team2').value],
+                'B': [document.getElementById('groupB_team1').value, document.getElementById('groupB_team2').value],
+                // 类似地处理小组 C 和 D 的选择
+            };
+
+            // 可以将预测发送到服务器进行后续处理，或者在这里处理预测逻辑
+            console.log(predictions);
+            alert("预测成功提交！");
+
+            // 可以重定向用户到另一个页面显示结果，或者更新当前页面显示结果
+            // window.location.href = "/result";
+        }
+    </script>
 </body>
 </html>
