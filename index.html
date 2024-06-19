@@ -71,7 +71,7 @@
         <div class="team-select" id="groupB_team4" onclick="selectTeam('groupB', 'Venezuela')">Venezuela</div>
     </div>
 
-    <!-- 小组 C 和 D 的代码类似，这里省略 -->
+    <!-- 可选：添加小组 C 和 D 的选择 -->
 
     <button class="submit-btn" onclick="submitPredictions()">提交预测</button>
 
@@ -111,9 +111,8 @@
                 }
             }
 
-            // 可以将预测发送到服务器进行后续处理，或者在这里处理预测逻辑
-            console.log(selections);
-            alert("预测成功提交！");
+            // 将预测存储到本地存储中
+            localStorage.setItem('groupStageSelection', JSON.stringify(selections));
 
             // 跳转到淘汰赛预测页面
             window.location.href = "knockout.html";
