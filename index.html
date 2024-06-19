@@ -20,14 +20,21 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
+            cursor: pointer;
         }
         .team-select label {
             font-weight: bold;
         }
-        .team-select select {
+        .team-select .team {
             width: 70%;
             padding: 5px;
             font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .team-select .team.selected {
+            background-color: #007bff;
+            color: white;
         }
         .submit-btn {
             display: block;
@@ -50,46 +57,18 @@
 
     <div class="group" id="groupA">
         <h2>小组 A</h2>
-        <div class="team-select">
-            <label for="groupA_team1">队伍 1：</label>
-            <select id="groupA_team1">
-                <option value="Argentina">Argentina</option>
-                <option value="Bolivia">Bolivia</option>
-                <option value="Chile">Chile</option>
-                <option value="Paraguay">Paraguay</option>
-            </select>
-        </div>
-        <div class="team-select">
-            <label for="groupA_team2">队伍 2：</label>
-            <select id="groupA_team2">
-                <option value="Argentina">Argentina</option>
-                <option value="Bolivia">Bolivia</option>
-                <option value="Chile">Chile</option>
-                <option value="Paraguay">Paraguay</option>
-            </select>
-        </div>
+        <div class="team-select" id="groupA_team1" onclick="selectTeam('groupA', 'Argentina')">Argentina</div>
+        <div class="team-select" id="groupA_team2" onclick="selectTeam('groupA', 'Bolivia')">Bolivia</div>
+        <div class="team-select" id="groupA_team3" onclick="selectTeam('groupA', 'Chile')">Chile</div>
+        <div class="team-select" id="groupA_team4" onclick="selectTeam('groupA', 'Paraguay')">Paraguay</div>
     </div>
 
     <div class="group" id="groupB">
         <h2>小组 B</h2>
-        <div class="team-select">
-            <label for="groupB_team1">队伍 1：</label>
-            <select id="groupB_team1">
-                <option value="Brazil">Brazil</option>
-                <option value="Ecuador">Ecuador</option>
-                <option value="Peru">Peru</option>
-                <option value="Venezuela">Venezuela</option>
-            </select>
-        </div>
-        <div class="team-select">
-            <label for="groupB_team2">队伍 2：</label>
-            <select id="groupB_team2">
-                <option value="Brazil">Brazil</option>
-                <option value="Ecuador">Ecuador</option>
-                <option value="Peru">Peru</option>
-                <option value="Venezuela">Venezuela</option>
-            </select>
-        </div>
+        <div class="team-select" id="groupB_team1" onclick="selectTeam('groupB', 'Brazil')">Brazil</div>
+        <div class="team-select" id="groupB_team2" onclick="selectTeam('groupB', 'Ecuador')">Ecuador</div>
+        <div class="team-select" id="groupB_team3" onclick="selectTeam('groupB', 'Peru')">Peru</div>
+        <div class="team-select" id="groupB_team4" onclick="selectTeam('groupB', 'Venezuela')">Venezuela</div>
     </div>
 
     <!-- 小组 C 和 D 的代码类似，这里省略 -->
@@ -97,16 +76,43 @@
     <button class="submit-btn" onclick="submitPredictions()">提交预测</button>
 
     <script>
+        // 存储用户选择的队伍
+        var selections = {
+            'groupA': [],
+            'groupB': [],
+            // 可以继续添加小组 C 和 D 的选择
+        };
+
+        // 处理队伍选择
+        function selectTeam(group, team) {
+            var selectedTeams = selections[group];
+            
+            // 如果队伍已经被选择，取消选择
+            if (selectedTeams.includes(team)) {
+                var index = selectedTeams.indexOf(team);
+                if (index > -1) {
+                    selectedTeams.splice(index, 1);
+                }
+                document.getElementById(group + '_' + team).classList.remove('selected');
+            } else {
+                // 如果队伍未被选择，添加到选择列表中
+                selectedTeams.push(team);
+                document.getElementById(group + '_' + team).classList.add('selected');
+            }
+        }
+
+        // 处理提交预测
         function submitPredictions() {
-            // 收集用户选择的前两名队伍
-            var predictions = {
-                'A': [document.getElementById('groupA_team1').value, document.getElementById('groupA_team2').value],
-                'B': [document.getElementById('groupB_team1').value, document.getElementById('groupB_team2').value],
-                // 类似地处理小组 C 和 D 的选择
-            };
+            // 验证是否每个小组选择了两支队伍
+            for (var group in selections) {
+                if (selections[group].length !== 2) {
+                    alert('请为每个小组选择前两名队伍！');
+                    return;
+                }
+            }
 
             // 可以将预测发送到服务器进行后续处理，或者在这里处理预测逻辑
-            console.log(predictions);
+            console.log(selections);
             alert("预测成功提交！");
 
             // 可以重定向用户到另一个页面显示结果，或者更新当前页面显示结果
