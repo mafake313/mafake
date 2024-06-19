@@ -33,14 +33,14 @@
             border-radius: 5px;
         }
         .team-select .team.selected {
-            background-color: aqua;
+            background-color: #007bff;
             color: white;
         }
         .submit-btn {
             display: block;
             margin-top: 10px;
             padding: 10px 20px;
-            background-color: aqua;
+            background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
@@ -48,7 +48,7 @@
             border-radius: 5px;
         }
         .submit-btn:hover {
-            background-color: aqua;
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -115,8 +115,8 @@
             console.log(selections);
             alert("预测成功提交！");
 
-            // 可以重定向用户到另一个页面显示结果，或者更新当前页面显示结果
-            // window.location.href = "/result";
+            // 跳转到淘汰赛预测页面
+            window.location.href = "knockout.html";
         }
     </script>
 </body>
