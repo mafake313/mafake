@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024 美洲杯淘汰赛预测</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .match {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .match h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .match .team-select {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .match .team-select label {
+            font-weight: bold;
+        }
+        .match .team-select select {
+            width: 70%;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .submit-btn {
+            display: block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>2024 美洲杯淘汰赛预测</h1>
+
+    <div class="match" id="quarterfinals">
+        <h3>八强预测</h3>
+        <div class="team-select" id="quarterfinals_match1">
+            <label for="quarterfinals_team1">对阵：</label>
+            <select id="quarterfinals_team1">
+                <!-- 你可以根据需要添加八强赛的对阵 -->
+                <option value="winnerGroupA">小组A第一名 vs 小组B第二名</option>
+                <option value="winnerGroupB">小组B第一名 vs 小组A第二名</option>
+                <!-- 其他对阵 -->
+            </select>
+        </div>
+        <!-- 可以添加更多八强赛的对阵 -->
+    </div>
+
+    <div class="match" id="semifinals">
+        <h3>四强预测</h3>
+        <div class="team-select" id="semifinals_match1">
+            <label for="semifinals_team1">对阵：</label>
+            <select id="semifinals_team1">
+                <!-- 你可以根据需要添加四强赛的对阵 -->
+                <option value="winnerQF1">八强赛1胜者 vs 八强赛2胜者</option>
+                <option value="winnerQF2">八强赛3胜者 vs 八强赛4胜者</option>
+                <!-- 其他对阵 -->
+            </select>
+        </div>
+        <!-- 可以添加更多四强赛的对阵 -->
+    </div>
+
+    <div class="match" id="final">
+        <h3>决赛预测</h3>
+        <div class="team-select" id="final_match1">
+            <label for="final_team1">对阵：</label>
+            <select id="final_team1">
+                <!-- 添加决赛对阵 -->
+                <option value="winnerSF1">四强赛1胜者 vs 四强赛2胜者</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="submit-btn" onclick="submitKnockoutPredictions()">提交淘汰赛预测</button>
+
+    <script>
+        // 存储淘汰赛阶段的预测
+        var knockoutPredictions = {
+            'quarterfinals': {},
+            'semifinals': {},
+            'final': {}
+        };
+
+        // 处理淘汰赛预测提交
+        function submitKnockoutPredictions() {
+            // 获取用户选择的八强对阵
+            knockoutPredictions.quarterfinals.match1 = document.getElementById('quarterfinals_team1').value;
+            // 可以继续添加其他八强对阵的选择
+
+            // 获取用户选择的四强对阵
+            knockoutPredictions.semifinals.match1 = document.getElementById('semifinals_team1').value;
+            // 可以继续添加其他四强对阵的选择
+
+            // 获取用户选择的决赛对阵
+            knockoutPredictions.final.match1 = document.getElementById('final_team1').value;
+
+            // 可以将预测发送到服务器进行后续处理，或者在这里处理预测逻辑
+            console.log(knockoutPredictions);
+            alert("淘汰赛预测成功提交！");
+
+            // 可以重定向用户到另一个页面显示结果，或者更新当前页面显示结果
+            // window.location.href = "/result";
+        }
+    </script>
+</body>
+</html>
